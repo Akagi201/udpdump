@@ -45,10 +45,10 @@ func main() {
 	_, err := flags.Parse(&opts)
 	if err != nil {
 		if !strings.Contains(err.Error(), "Usage") {
-			fmt.Fprintf(os.Stderr, "error: %v\n", err.Error())
+			log.Printf("error: %v\n", err.Error())
 			os.Exit(1)
 		} else {
-			fmt.Fprintf(os.Stderr, "%v\n", err.Error())
+			log.Printf("%v\n", err.Error())
 			os.Exit(0)
 		}
 	}
