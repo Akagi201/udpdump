@@ -33,12 +33,12 @@ func newUDPListener(host string, port uint16) (*net.UDPConn, error) {
 
 func handleClient(conn *net.UDPConn) {
 	b := make([]byte, 1024)
-	_, addr, err := conn.ReadFromUDP(b)
+	n, addr, err := conn.ReadFromUDP(b)
 	if err != nil {
 		log.Printf("Read from UDP failed, err: %v", err)
 		return
 	}
-	log.Printf("Read from client(%v:%v): %v", addr.IP, addr.Port, string(b))
+	log.Printf("Read from client(%v:%v), len: %v, [%v]", addr.IP, addr.Port, n, string(b[:n]))
 }
 
 func main() {
