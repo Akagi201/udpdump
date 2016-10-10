@@ -11,7 +11,7 @@ import (
 )
 
 var opts struct {
-	Host string `long:"host" default:"127.0.0.1" description:"IP to bind to"`
+	Host string `long:"host" default:"0.0.0.0" description:"IP to bind to"`
 	Port uint16 `long:"port" default:"2202" description:"UDP port to bind to"`
 }
 
