@@ -42,12 +42,14 @@ func handleClient(conn *net.UDPConn) {
 	log.Printf("Read from client(%v:%v), len: %v, [%v]", addr.IP, addr.Port, n, string(b[:n]))
 
 	if len(opts.File) != 0 {
-		f, err := os.OpenFile(opts.File, os.O_APPEND|os.O_WRONLY, 0600)
+		f, err := os.OpenFile(opts.File, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 		if err != nil {
+			log.Printf("Open file failed, err: %v", err)
 			return
 		}
 		defer f.Close()
 		if _, err = f.Write(b[:n]); err != nil {
+			log.Printf("Write file failed, err: %v", err)
 			return
 		}
 	}
