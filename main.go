@@ -13,6 +13,7 @@ import (
 var opts struct {
 	Host string `long:"host" default:"0.0.0.0" description:"IP to bind to"`
 	Port uint16 `long:"port" default:"2202" description:"UDP port to bind to"`
+	File string `long:"file" default:"" description:"dump received data to a dump file"`
 }
 
 func newUDPListener(host string, port uint16) (*net.UDPConn, error) {
@@ -39,6 +40,19 @@ func handleClient(conn *net.UDPConn) {
 		return
 	}
 	log.Printf("Read from client(%v:%v), len: %v, [%v]", addr.IP, addr.Port, n, string(b[:n]))
+
+	if len(opts.File) != 0 {
+		f, err := os.OpenFile(opts.File, os.O_APPEND|os.O_WRONLY, 0600)
+		if err != nil {
+			return
+		}
+		defer f.Close()
+		if _, err = f.Write(b[:n]); err != nil {
+			return
+		}
+	}
+
+	conn.WriteToUDP(b[:n], addr)
 }
 
 func main() {
