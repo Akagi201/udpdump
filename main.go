@@ -11,9 +11,10 @@ import (
 )
 
 var opts struct {
-	Host string `long:"host" default:"0.0.0.0" description:"IP to bind to"`
-	Port uint16 `long:"port" default:"2202" description:"UDP port to bind to"`
-	File string `long:"file" default:"" description:"dump received data to a dump file"`
+	Host   string `long:"host" default:"0.0.0.0" description:"IP to bind to"`
+	Port   uint16 `long:"port" default:"2202" description:"UDP port to bind to"`
+	File   string `long:"file" default:"" description:"dump received data to a dump file"`
+	Buffer int    `long:"buffer" default:"10240" description:"max buffer size for the socket io"`
 }
 
 func newUDPListener(host string, port uint16) (*net.UDPConn, error) {
@@ -33,7 +34,7 @@ func newUDPListener(host string, port uint16) (*net.UDPConn, error) {
 }
 
 func handleClient(conn *net.UDPConn) {
-	b := make([]byte, 1024)
+	b := make([]byte, opts.Buffer)
 	n, addr, err := conn.ReadFromUDP(b)
 	if err != nil {
 		log.Printf("Read from UDP failed, err: %v", err)
